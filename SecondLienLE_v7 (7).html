@@ -531,7 +531,7 @@ body {
   <div class="qi-row" id="qi_primeRow">
     <label class="qi-label">Current Prime Rate</label>
     <div style="display:flex;align-items:center;gap:4px;">
-      <input class="qi-input" id="qi_prime" oninput="recalc()" value="7.50" type="number" step="0.25" min="0" max="25" style="width:70px;"/>
+      <input class="qi-input" id="qi_prime" oninput="recalc()" value="6.75" type="number" step="0.25" min="0" max="25" style="width:70px;"/>
       <span style="font-size:12px;font-weight:600;color:var(--ink-mid);">%</span>
     </div>
   </div>
@@ -810,7 +810,7 @@ body {
 // CONFIG — All matrices and fee defaults live here. Edit freely.
 // ═══════════════════════════════════════════════════════════════════
 
-let PRIME = 7.50; // Default; overridden by qi_prime input
+let PRIME = 6.75; // Default; overridden by qi_prime input
 function getPrime() {
   const el = document.getElementById('qi_prime');
   if (el) {
