@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Second Lien Estimate – Loan Pronto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Mulish:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --paper:       #FDFAF6;
+  --paper-mid:   #F5F0E8;
+  --paper-deep:  #EDE6D8;
+  --rule:        #DDD7CC;
+  --ink:         #2C3340;
+  --ink-mid:     #5C6470;
+  --ink-light:   #9AA0AA;
+  --terra:       #B5622A;
+  --terra-pale:  #FBF0E8;
+  --sage:        #3D7A5E;
+  --sage-pale:   #EBF5EF;
+  --sage-light:  #C8E6D5;
+  --amber:       #9B6B1A;
+  --amber-pale:  #FDF4E0;
+  --amber-light: #F0D899;
+  --page-rail:   32px;
+  --card-pad:    24px;
+}
+html { font-size: 13px; }
+body {
+  font-family: 'Mulish', sans-serif;
+  background: #EDE8DF;
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  padding: 24px 20px;
+}
+
+/* ── TOOLBAR ── */
+.tool-bar {
+  max-width: 720px;
+  margin: 0 auto 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.product-switcher {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.ps-btn {
+  border: 1.5px solid var(--rule);
+  background: var(--paper);
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-family: 'Mulish', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.ps-btn:hover { border-color: var(--terra); color: var(--terra); }
+.ps-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.right-tools { display: flex; gap: 8px; }
+.print-btn {
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  padding: 8px 20px;
+  font-family: 'Mulish', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+  opacity: 0.75;
+  transition: opacity 0.2s;
+}
+.print-btn:hover { opacity: 1; }
+.gen-btn {
+  background: var(--terra-pale);
+  color: var(--terra);
+  border: 1.5px solid var(--terra);
+  padding: 8px 16px;
+  font-family: 'Mulish', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+.gen-btn:hover { background: var(--terra); color: white; }
+
+/* ── QUICK INPUTS PANEL ── */
+.quick-inputs {
+  max-width: 720px;
+  margin: 0 auto 10px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 10px 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px 14px;
+}
+.qi-row { display: flex; flex-direction: column; gap: 3px; }
+.qi-label { font-size: 8.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); }
+.qi-input {
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-family: 'Mulish', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  background: #fff;
+  outline: none;
+  width: 100%;
+}
+.qi-input:focus { border-color: var(--terra); box-shadow: 0 0 0 2px rgba(181,98,42,.1); }
+.qi-select {
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-family: 'Mulish', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  background: #fff;
+  outline: none;
+  width: 100%;
+  appearance: auto;
+}
+.qi-select:focus { border-color: var(--terra); }
+.qi-ineligible { color: #c0392b; font-size: 10px; font-weight: 700; padding: 4px 8px; background: #fff0ee; border-radius: 4px; border: 1px solid #f5c6c2; display: none; }
+
+/* ── PAGE ── */
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  background: var(--paper);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 32px rgba(44,51,64,0.13), 0 1px 4px rgba(44,51,64,0.07);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── HEADER ── */
+.page-header {
+  background: var(--paper);
+  padding: 8px var(--page-rail) 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--rule);
+  flex-shrink: 0;
+}
+.brand-logo { height: 26px; width: auto; display: block; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
+.hr-for { font-size: 9px; letter-spacing: 0.11em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 1px; line-height: 1.1; }
+.ei-name { font-family: 'Lora', serif; font-size: 16px; font-weight: 500; color: var(--ink); width: 220px; text-align: right; direction: ltr; }
+.hr-date { font-size: 9.5px; color: var(--ink-light); margin-top: 4px; display: flex; align-items: center; justify-content: flex-end; width: 220px; gap: 4px; white-space: nowrap; line-height: 1.1; }
+
+/* ── PRODUCT BADGE STRIP ── */
+.product-strip {
+  background: var(--paper-mid);
+  border-bottom: 1px solid var(--rule);
+  padding: 8px var(--page-rail);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.pstrip-label { font-size: 8.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-light); }
+.pstrip-name { font-size: 12px; font-weight: 700; color: var(--ink); }
+.pstrip-detail { font-size: 10.5px; color: var(--ink-mid); }
+.pstrip-sep { color: var(--rule); font-size: 14px; }
+.pstrip-ineligible { font-size: 10px; font-weight: 700; color: #c0392b; background: #fff0ee; border: 1px solid #f5c6c2; border-radius: 4px; padding: 2px 8px; display: none; }
+
+/* ── SUMMARY HERO ── */
+:root {
+  --hero-pad-x: 24px;
+  --hero-pad-top: 22px;
+  --hero-pad-bot: 20px;
+  --hero-number-row: 56px;
+  --hero-divider-thickness: 1px;
+  --hero-gap-after-eyebrow: 6px;
+  --hero-gap-after-number: 8px;
+}
+.summary-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-bottom: 2px solid var(--rule);
+  flex-shrink: 0;
+}
+.sh-card {
+  padding: var(--hero-pad-top) var(--hero-pad-x) var(--hero-pad-bot);
+  position: relative;
+  display: grid;
+  grid-template-rows: auto var(--hero-number-row) var(--hero-divider-thickness) 1fr;
+  row-gap: 0;
+}
+.sh-card + .sh-card { border-left: 1px solid var(--rule); }
+.sh-card.rate-card  { background: var(--amber-pale); padding-left: var(--page-rail); }
+.sh-card.pay-card   { background: var(--paper-mid); }
+.sh-card.cash-card  { background: var(--sage-pale); padding-right: var(--page-rail); }
+.sh-card.cash-card .sh-eyebrow,
+.sh-card.cash-card .sh-number { justify-self: end; text-align: right; }
+.sh-card.cash-card .cash-breakdown { width: 100%; justify-self: stretch; }
+.sh-card.cash-card .cb-row span:last-child { text-align: right; }
+
+.sh-eyebrow { font-size: 8.5px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; margin-bottom: var(--hero-gap-after-eyebrow); }
+.sh-eyebrow.rate { color: var(--amber); }
+.sh-eyebrow.pay  { color: var(--ink-light); }
+.sh-eyebrow.cash { color: var(--sage); }
+
+.sh-number { font-family: 'Lora', serif; font-weight: 500; letter-spacing: -0.03em; line-height: 1; align-self: end; display: inline-flex; align-items: flex-end; gap: 0; }
+.sh-number.rate { font-size: 48px; color: var(--amber); }
+.sh-number.pay  { font-size: 48px; color: var(--ink); }
+.sh-number.cash { font-size: 48px; color: var(--sage); }
+
+.rate-pct { font-family: 'Lora', serif; font-size: 24px; font-weight: 400; color: var(--amber); opacity: 0.7; line-height: 1; margin-left: 3px; display: inline-block; vertical-align: baseline; align-self: flex-end; }
+
+.sh-number + .sh-divider { margin-top: var(--hero-gap-after-number); }
+.sh-divider { width: 100%; height: var(--hero-divider-thickness); justify-self: stretch; align-self: stretch; margin: 0 0 32px 0; }
+.sh-divider.rate { background: var(--amber-light); }
+.sh-divider.pay  { background: var(--rule); }
+.sh-divider.cash { background: var(--sage-light); }
+
+.rate-breakdown, .pay-breakdown, .cash-breakdown { border-top: none; }
+.rate-breakdown { padding-top: 22px; display: flex; flex-direction: column; gap: 6px; }
+.rb-row { display: flex; justify-content: space-between; align-items: center; font-size: 10.5px; }
+.rb-label { color: var(--ink-mid); }
+.rb-val { font-weight: 600; color: var(--ink-mid); font-variant-numeric: tabular-nums; display: inline-flex; align-items: baseline; gap: 2px; }
+
+.pay-breakdown { padding-top: 22px; display: flex; flex-direction: column; gap: 6px; }
+.pb-row { display: flex; justify-content: space-between; align-items: center; font-size: 10.5px; }
+.pb-label { color: var(--ink-mid); }
+.pb-amt { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; display: inline-flex; align-items: baseline; justify-content: flex-end; gap: 2px; }
+.pb-amt.muted { color: var(--ink-light); font-weight: 400; }
+
+.cash-breakdown { padding-top: 22px; display: flex; flex-direction: column; gap: 6px; }
+.cb-row { display: flex; justify-content: space-between; align-items: center; font-size: 10.5px; color: var(--ink-mid); }
+.cb-amt { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+.cb-amt.deduct { color: var(--ink-mid); }
+
+/* ── SNAPSHOT ── */
+.snapshot { padding: 8px var(--page-rail); display: grid; grid-template-columns: repeat(6, 1fr); border-bottom: 1px solid var(--rule); flex-shrink: 0; }
+.snapshot.heloan-mode { grid-template-columns: repeat(5, 1fr); }
+.snap-item { text-align: center; padding: 7px 8px; border-right: 1px solid var(--rule); }
+.snap-item:last-child { border-right: none; }
+.snap-label { font-size: 8.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 3px; }
+.snap-value { font-size: 12.5px; font-weight: 600; color: var(--ink); display: flex; align-items: center; justify-content: center; min-height: 22px; }
+
+/* ── COST SECTION ── */
+.cost-section { padding: 8px var(--page-rail) 6px; flex: 1; display: flex; flex-direction: column; gap: 12px; }
+.cost-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: stretch; }
+.cost-grid .cost-card { display: flex; flex-direction: column; }
+.cost-card { border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--paper); }
+.cost-card-head { background: var(--paper-mid); padding: 7px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--rule); }
+.cch-title { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); }
+.cch-total { font-size: 11.5px; font-weight: 700; color: var(--ink); }
+.cost-sub-head { font-size: 8px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-light); padding: 6px 14px 3px; }
+.cost-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 14px; font-size: 11px; border-bottom: 1px solid var(--paper-mid); color: var(--ink-mid); }
+.cost-row:last-of-type { border-bottom: none; }
+.cr-amt { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; display: inline-flex; align-items: baseline; justify-content: flex-end; white-space: nowrap; gap: 2px; }
+.cr-dollar { font-weight: 600; color: var(--ink); line-height: 1; flex-shrink: 0; }
+.cost-grand { display: flex; justify-content: space-between; padding: 7px 14px; font-size: 11.5px; font-weight: 700; color: var(--ink-mid); background: var(--paper-mid); border-top: 1px solid var(--rule); margin-top: auto; }
+
+/* ── SPLIT SUMMARY ── */
+.summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.summary-grid .cost-card { display: flex; flex-direction: column; }
+.summary-grid .cost-row { font-size: 11.5px; }
+.summary-grid .cr-amt { font-size: 11.5px; }
+.summary-total-v2 { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; min-height: 62px; background: var(--paper-mid); border-top: 1px solid var(--rule); }
+.summary-total-label { font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-light); }
+.summary-total-amt { font-size: 15px; font-weight: 600; color: var(--ink-mid); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.cash-total { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; min-height: 62px; background: var(--sage-pale); border-top: 2px solid var(--sage); }
+.cash-label { font-size: 9.5px; font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase; color: var(--sage); }
+.cash-amount { font-family: 'Lora', serif; font-size: 28px; font-weight: 500; color: var(--sage); letter-spacing: -0.02em; }
+
+/* ── DISCLAIMER ── */
+.disclaimer { padding: 6px var(--page-rail) 10px; flex-shrink: 0; }
+.disclaimer p { font-size: 8.5px; color: var(--ink-light); line-height: 1.65; font-style: italic; }
+
+/* ── FOOTER ── */
+.page-footer { background: var(--paper-mid); border-top: 1px solid var(--rule); padding: 14px var(--page-rail); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+.fa-name { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 1px; line-height: 1.1; }
+.fa-title { font-size: 9.5px; color: var(--ink-light); letter-spacing: 0.03em; }
+.footer-phone-pill { display: flex; align-items: center; gap: 8px; background: var(--terra-pale); border: 1.5px solid var(--terra); padding: 9px 20px; border-radius: 40px; }
+.fpp-icon { font-size: 14px; }
+.fpp-number { font-size: 15px; font-weight: 700; color: var(--terra); letter-spacing: 0.02em; }
+.fpp-cta { font-size: 9px; color: var(--terra); opacity: 0.7; font-style: italic; }
+
+/* ── EDITABLE INPUTS ── */
+.ei {
+  background: transparent; border: none;
+  border-bottom: 1.5px dashed rgba(150,140,120,.25);
+  outline: none; font-family: inherit; font-size: inherit; font-weight: inherit; color: inherit;
+  cursor: text; padding: 0; transition: background .15s ease, box-shadow .15s ease, border-bottom-color .15s ease;
+}
+.ei:hover { background: rgba(0,0,0,.03); }
+.ei:focus { border-bottom-color: var(--terra); background: rgba(181,98,42,.06); border-radius: 1px 1px 0 0; box-shadow: 0 0 0 2px rgba(181,98,42,.14); }
+.ei-name { text-align: right; line-height: 1.1; }
+.ei-rate { font-family: 'Lora', serif; font-size: 48px; font-weight: 500; color: var(--amber); letter-spacing: -0.03em; width: 5ch; line-height: 1; text-align: left; border-bottom: none; display: inline-block; vertical-align: baseline; padding:0; margin:0; border:0; outline:none; background:transparent; appearance:none; -webkit-appearance:none; height:1em; }
+.ei-rate:hover { background: rgba(155,107,26,0.05); }
+.ei-rate:focus { border-bottom: 1.5px dashed var(--terra); }
+.ei-pval { font-size: 12.5px; font-weight: 600; color: var(--ink); width: 8ch; text-align: right; }
+.ei-amt  { text-align: right; width: 7ch; font-size: 11px; font-weight: 600; color: var(--ink); padding: 0; }
+.ei-mo   { font-size: 10.5px; font-weight: 600; color: var(--ink); width: auto; text-align: right; }
+.ei-sm   { width: 2ch; text-align: right; }
+
+/* ── ADVISOR SETTINGS ── */
+.advisor-settings { position: fixed; right: 16px; bottom: 16px; width: 280px; background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; box-shadow: 0 10px 40px rgba(44,51,64,0.18), 0 2px 8px rgba(44,51,64,0.10); padding: 12px; z-index: 9999; display: none; }
+.advisor-settings.open { display: block; }
+.as-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+.as-title { font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }
+.as-hint { font-size: 10px; color: var(--ink-light); }
+.as-row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
+.as-label { font-size: 9px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-light); }
+.as-input { width: 100%; border: 1px solid var(--rule); border-radius: 8px; padding: 8px 10px; font-family: 'Mulish', sans-serif; font-size: 12px; color: var(--ink); background: #fff; outline: none; }
+.as-input:focus { border-color: var(--terra); box-shadow: 0 0 0 3px rgba(181,98,42,.12); }
+.as-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px; }
+.as-btn { border: 1px solid var(--rule); background: var(--paper-mid); color: var(--ink-mid); padding: 7px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
+.as-btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* ── EMAIL/SMS GENERATOR ── */
+.gen-panel {
+  max-width: 720px;
+  margin: 16px auto 0;
+  background: var(--paper);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 32px rgba(44,51,64,0.10);
+  display: none;
+}
+.gen-panel.open { display: block; }
+.gen-header {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 14px var(--page-rail);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.gen-title { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+.gen-close { background: none; border: none; color: var(--paper); opacity: 0.6; font-size: 18px; cursor: pointer; line-height: 1; }
+.gen-close:hover { opacity: 1; }
+.gen-body { padding: 20px var(--page-rail); display: grid; gap: 14px; }
+.gen-tabs { display: flex; gap: 6px; }
+.gen-tab { border: 1.5px solid var(--rule); background: var(--paper-mid); border-radius: 20px; padding: 6px 14px; font-family: 'Mulish', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; color: var(--ink-mid); transition: all 0.15s; }
+.gen-tab.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.gen-output-wrap { position: relative; }
+.gen-output {
+  width: 100%;
+  min-height: 140px;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: #fff;
+  padding: 14px;
+  font-family: 'Mulish', sans-serif;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink);
+  resize: vertical;
+}
+.gen-copy-btn { position: absolute; top: 8px; right: 8px; background: var(--paper-mid); border: 1px solid var(--rule); border-radius: 4px; padding: 4px 10px; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; color: var(--ink-mid); transition: all 0.15s; }
+.gen-copy-btn:hover { background: var(--ink); color: var(--paper); }
+.gen-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.gen-regen { background: var(--terra-pale); border: 1.5px solid var(--terra); color: var(--terra); border-radius: 4px; padding: 8px 16px; font-family: 'Mulish', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+.gen-regen:hover { background: var(--terra); color: white; }
+
+/* ── PAYOFFS (inline in Cash Out Breakdown) ── */
+.payoff-add-row { border-bottom: none; padding-top: 2px; padding-bottom: 2px; }
+.ctc-add-payoff {
+  border: 1px dashed var(--rule);
+  background: none;
+  border-radius: 4px;
+  padding: 3px 9px;
+  font-family: 'Mulish', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-light);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.ctc-add-payoff:hover { border-color: var(--terra); color: var(--terra); }
+.payoff-total-label { font-size: 10.5px; color: var(--ink-mid); }
+.payoff-row-input {
+  border: none;
+  border-bottom: 1px dashed var(--rule);
+  background: transparent;
+  font-family: 'Mulish', sans-serif;
+  font-size: 11px;
+  color: var(--ink);
+  outline: none;
+  padding: 1px 2px;
+}
+.payoff-row-input:focus { border-bottom-color: var(--terra); }
+.payoff-row-input.payoff-label { flex: 1; min-width: 0; }
+.payoff-row-input.payoff-amt { font-weight: 600; }
+.payoff-remove { background: none; border: none; color: var(--ink-light); cursor: pointer; font-size: 14px; line-height: 1; padding: 0 2px; flex-shrink: 0; }
+.payoff-remove:hover { color: #c0392b; }
+.payoff-row { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+.payoff-row > :first-child { flex: 1; min-width: 0; }
+
+/* ── BUCKET INPUTS — editable fee amounts ── */
+.bucket-input {
+  width: 6ch;
+  text-align: right;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 0;
+  border-bottom: 1px dashed transparent;
+  transition: border-color 0.15s;
+}
+.bucket-input:hover { border-bottom-color: rgba(150,140,120,.35); }
+.bucket-input:focus { border-bottom-color: var(--terra) !important; background: rgba(181,98,42,.05); border-radius: 1px; }
+
+/* ── CASH CARD — cash-total pinned to bottom ── */
+#ctcCashTotal { margin-top: auto; }
+
+@media print {
+  html, body { height: 100%; margin: 0; padding: 0; background: white; }
+  .tool-bar, .gen-panel, .advisor-settings, .quick-inputs { display: none !important; }
+  .lpc-row { display: none !important; }
+  #payoffRow.payoff-empty { display: none !important; }
+  .bucket-input { pointer-events: none; }
+  input, select, textarea { border: none !important; outline: none !important; background: transparent !important; box-shadow: none !important; padding: 0 !important; appearance: none !important; -webkit-appearance: none !important; color: inherit !important; font: inherit !important; }
+  .page { max-width: 100%; width: 100%; box-shadow: none; border-radius: 0; }
+  .ei { border-bottom: none !important; background: transparent !important; }
+  @page { size: letter portrait; margin: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- ADVISOR SETTINGS (Ctrl+Shift+L) -->
+<div class="advisor-settings" id="advisorSettings" aria-hidden="true">
+  <div class="as-head">
+    <div class="as-title">Advisor Info</div>
+    <div class="as-hint">Ctrl+Shift+L</div>
+  </div>
+  <div class="as-row"><label class="as-label">Name</label><input class="as-input" id="advisorNameInput" value="Harry Carwile" autocomplete="off"/></div>
+  <div class="as-row"><label class="as-label">Title</label><input class="as-input" id="advisorTitleInput" value="Senior Mortgage Consultant" autocomplete="off"/></div>
+  <div class="as-row"><label class="as-label">NMLS</label><input class="as-input" id="advisorNmlsInput" value="2134940" inputmode="numeric" autocomplete="off"/></div>
+  <div class="as-row"><label class="as-label">Phone</label><input class="as-input" id="advisorPhoneInput" value="(704) 307-4482" autocomplete="off"/></div>
+  <div class="as-actions">
+    <button class="as-btn" id="advisorResetBtn" type="button">Reset</button>
+    <button class="as-btn primary" id="advisorCloseBtn" type="button">Close</button>
+  </div>
+</div>
+
+<!-- TOOLBAR -->
+<div class="tool-bar">
+  <div class="product-switcher" id="productSwitcher">
+    <button class="ps-btn active" data-product="spring_heloc">Spring HELOC</button>
+    <button class="ps-btn" data-product="quorum_heloc">Quorum HELOC</button>
+    <button class="ps-btn" data-product="uwm_heloc">UWM HELOC</button>
+    <button class="ps-btn" data-product="spring_heloan">Spring HELOAN</button>
+    <button class="ps-btn" data-product="quorum_heloan">Quorum HELOAN</button>
+  </div>
+  <div class="right-tools">
+    <button class="gen-btn" id="genToggleBtn">✉ Generate Email / SMS</button>
+    <button class="print-btn" onclick="window.print()">⬇ Save as PDF</button>
+  </div>
+</div>
+
+<!-- QUICK INPUTS PANEL (LO inputs – drives matrix logic) -->
+<div class="quick-inputs" id="quickInputs">
+  <div class="qi-row">
+    <label class="qi-label">Occupancy</label>
+    <select class="qi-select" id="qi_occupancy" onchange="recalc()">
+      <option value="primary">Primary</option>
+      <option value="second">Second Home</option>
+      <option value="investment">Investment</option>
+    </select>
+  </div>
+  <div class="qi-row">
+    <label class="qi-label">Borrowers</label>
+    <select class="qi-select" id="qi_borrowers" onchange="recalc()">
+      <option value="single">Single</option>
+      <option value="joint">Joint</option>
+    </select>
+  </div>
+  <div class="qi-row">
+    <label class="qi-label">State</label>
+    <input class="qi-input" id="qi_state" oninput="recalc()" value="NC" placeholder="e.g. NC" style="text-transform:uppercase;" maxlength="2"/>
+  </div>
+  <div class="qi-row">
+    <label class="qi-label">Comp Structure</label>
+    <select class="qi-select" id="qi_comp" onchange="recalc()">
+      <option value="bpc_3">Borrower Paid 3%</option>
+      <option value="bpc_custom">Borrower Paid – Custom</option>
+      <option value="lpc_2">LPC 2.00% (Spring only)</option>
+      <option value="lpc_1_75">LPC 1.75%</option>
+      <option value="lpc_1_5">LPC 1.50%</option>
+      <option value="lpc_1_25">LPC 1.25%</option>
+      <option value="lpc_1_0">LPC 1.00%</option>
+      <option value="lpc_0_75">LPC 0.75%</option>
+      <option value="lpc_0_5">LPC 0.50%</option>
+      <option value="lpc_0_25">LPC 0.25%</option>
+    </select>
+  </div>
+  <div class="qi-row" id="qi_customCompRow" style="display:none;">
+    <label class="qi-label">Custom Comp %</label>
+    <input class="qi-input" id="qi_customComp" oninput="recalc()" value="3.00" type="number" step="0.25" min="0" max="4"/>
+  </div>
+  <div class="qi-row" id="qi_termRow">
+    <label class="qi-label" id="qi_termLabel">Term / Period</label>
+    <select class="qi-select" id="qi_term" onchange="recalc()">
+      <option value="20">20-Year</option>
+      <option value="30">30-Year (Spring only)</option>
+      <option value="15">15-Year</option>
+      <option value="10">10-Year</option>
+    </select>
+  </div>
+  <div class="qi-row" id="qi_primeRow">
+    <label class="qi-label">Current Prime Rate</label>
+    <div style="display:flex;align-items:center;gap:4px;">
+      <input class="qi-input" id="qi_prime" oninput="recalc()" value="7.50" type="number" step="0.25" min="0" max="25" style="width:70px;"/>
+      <span style="font-size:12px;font-weight:600;color:var(--ink-mid);">%</span>
+    </div>
+  </div>
+  <div id="qi_ineligibleMsg" class="qi-ineligible"></div>
+</div>
+
+<!-- LOAN ESTIMATE PAGE -->
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="brand">
+      <img class="brand-logo" alt="Loan Pronto" src="https://loanpronto.com/wp-content/themes/loanpronto-theme/dist/img/svg/icons/full_logo.svg"/>
+    </div>
+    <div class="header-right">
+      <div class="hr-for">Prepared for</div>
+      <div class="hr-name">
+        <input class="ei ei-name" id="clientName" oninput="recalc()" value="" placeholder="Borrower Name" style="width:220px;"/>
+      </div>
+      <div class="hr-date">
+        <span id="headerDate"></span>
+        <span>·</span>
+        <span id="headerProductLabel">Home Equity Line of Credit</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT STRIP -->
+  <div class="product-strip">
+    <div class="pstrip-label">Product</div>
+    <div class="pstrip-sep">|</div>
+    <div class="pstrip-name" id="stripProductName">Spring HELOC</div>
+    <div class="pstrip-sep">·</div>
+    <div class="pstrip-detail" id="stripProductDetail">Prime + Margin · 3-Year Draw · Interest-Only Payments</div>
+    <div class="pstrip-sep" id="stripSep2" style="display:none;">·</div>
+    <div class="pstrip-detail" id="stripAnnualFee" style="display:none;"></div>
+    <div class="pstrip-ineligible" id="stripIneligible"></div>
+  </div>
+
+  <!-- SUMMARY HERO -->
+  <div class="summary-hero">
+
+    <!-- RATE -->
+    <div class="sh-card rate-card">
+      <div class="sh-eyebrow rate" id="heroRateLabel">Interest Rate (Prime + Margin)</div>
+      <div class="sh-number rate">
+        <input class="ei ei-rate autosize" id="interestRate" oninput="recalc()" value="8.625"/>
+        <span class="rate-pct">%</span>
+      </div>
+      <div class="sh-divider rate"></div>
+      <div class="rate-breakdown">
+        <div class="rb-row">
+          <span class="rb-label" id="rateStructureLabel">Rate Structure</span>
+          <span class="rb-val" id="rateStructureVal">Prime + 1.875%</span>
+        </div>
+        <div class="rb-row">
+          <span class="rb-label">Loan Amount</span>
+          <span class="rb-val">$<span id="heroLoanAmt">100,000</span></span>
+        </div>
+        <div class="rb-row" id="heroFitRow">
+          <span class="rb-label" id="heroFitLabel">CLTV Bucket</span>
+          <span class="rb-val" id="heroFitVal">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT -->
+    <div class="sh-card pay-card">
+      <div class="sh-eyebrow pay" id="heroPayLabel">Estimated Monthly Payment</div>
+      <div class="sh-number pay" id="heroMonthly">$717</div>
+      <div class="sh-divider pay"></div>
+      <div class="pay-breakdown">
+        <div class="pb-row">
+          <span class="pb-label" id="payTypeLabel">Interest-Only Payment</span>
+          <span class="pb-amt" id="heroPi">$717</span>
+        </div>
+        <div class="pb-row" id="drawPeriodRow">
+          <span class="pb-label">Draw Period</span>
+          <span class="pb-amt muted" id="heroDrawPeriod">3 years</span>
+        </div>
+        <div class="pb-row" id="repayPeriodRow">
+          <span class="pb-label">Repayment Period</span>
+          <span class="pb-amt muted" id="heroRepayPeriod">20 years</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CASH / CREDIT -->
+    <div class="sh-card cash-card">
+      <div class="sh-eyebrow cash" id="heroCashLabel">Initial Draw / Cash to You</div>
+      <div class="sh-number cash" id="heroCash">$98,090</div>
+      <div class="sh-divider cash"></div>
+      <div class="cash-breakdown">
+        <div class="cb-row">
+          <span id="cbLoanLabel">Total Loan Amount</span>
+          <span class="cb-amt" id="cbLoanAmt">$100,000</span>
+        </div>
+        <div class="cb-row" id="cbDrawRow">
+          <span>Initial Draw</span>
+          <span class="cb-amt" id="cbDraw">$100,000</span>
+        </div>
+        <div class="cb-row">
+          <span>Closing Costs</span>
+          <span class="cb-amt deduct">− $<span id="cbCC">1,910</span></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SNAPSHOT BAR -->
+  <div class="snapshot" id="snapshotBar">
+    <div class="snap-item">
+      <div class="snap-label" id="snapLoanLabel">Credit Limit</div>
+      <div class="snap-value">$<input class="ei ei-pval autosize" id="loanAmount" oninput="recalc()" onblur="evalAmt(this)" value="100,000"/></div>
+    </div>
+    <div class="snap-item" id="snapDrawItem">
+      <div class="snap-label">Initial Draw</div>
+      <div class="snap-value">$<input class="ei ei-pval autosize" id="initialDraw" oninput="recalc()" onblur="evalDrawAmt(this)" value="100,000"/></div>
+    </div>
+    <div class="snap-item">
+      <div class="snap-label">Property Value</div>
+      <div class="snap-value">$<input class="ei ei-pval autosize" id="propValue" oninput="recalc()" onblur="evalAmt(this)" value="500,000"/></div>
+    </div>
+    <div class="snap-item">
+      <div class="snap-label">1st Mortgage Bal.</div>
+      <div class="snap-value">$<input class="ei ei-pval autosize" id="firstBalance" oninput="recalc()" onblur="evalAmt(this)" value="280,000"/></div>
+    </div>
+    <div class="snap-item">
+      <div class="snap-label">Combined LTV</div>
+      <div class="snap-value" id="cltvDisplay">76.0%</div>
+    </div>
+    <div class="snap-item">
+      <div class="snap-label">Credit Score</div>
+      <div class="snap-value"><input class="ei" id="creditScore" oninput="recalc()" style="width:56px;font-size:12.5px;font-weight:600;color:var(--ink);text-align:center;" value="742"/></div>
+    </div>
+  </div>
+
+  <!-- HIDDEN FEE INPUTS — used by JS for calculation, not shown to consumer -->
+  <div style="display:none;">
+    <div id="adminFeeRow"><input id="adminFee" oninput="recalc()" onblur="evalAmt(this)" value="999"/><span id="adminFeeLabel">Admin Fee</span></div>
+    <div id="originationFeeRow"><input id="originationFee" oninput="recalc()" onblur="evalAmt(this)" value="0"/></div>
+    <div id="processingFeeRow"><input id="processingFee" oninput="recalc()" onblur="evalAmt(this)" value="100"/></div>
+    <div id="compRow"><span id="compLabel">Comp</span><span id="compAmt">0</span></div>
+    <input id="creditReport"  oninput="recalc()" onblur="evalAmt(this)" value="26"/>
+    <input id="floodFee"      oninput="recalc()" onblur="evalAmt(this)" value="7.50"/>
+    <div id="docPrepRow"><input id="docPrepFee" oninput="recalc()" onblur="evalAmt(this)" value="39.50"/></div>
+    <div id="mersRow"><input id="mersFee" oninput="recalc()" onblur="evalAmt(this)" value="24.95"/></div>
+    <input id="titleFees"     oninput="recalc()" onblur="evalAmt(this)" value="80"/><span id="titleFeeLabel">Title</span>
+    <div id="notaryRow"><input id="notaryFee" oninput="recalc()" onblur="evalAmt(this)" value="290"/></div>
+    <div id="avmRow"><input id="avmFee" oninput="recalc()" onblur="evalAmt(this)" value="45"/></div>
+    <input id="recordingFee"  oninput="recalc()" onblur="evalAmt(this)" value="140"/>
+    <div id="appraisalRow"><input id="appraisalFee" oninput="recalc()" onblur="evalAmt(this)" value="0"/></div>
+  </div>
+
+  <!-- COST DETAIL — consumer-facing 2-bucket view -->
+  <div class="cost-section">
+    <div class="cost-grid">
+
+      <!-- FEES CARD: 2 visible rows + subtotals -->
+      <div class="cost-card">
+        <div class="cost-card-head">
+          <span class="cch-title">Estimated Loan Setup Costs</span>
+          <span class="cch-total">$<span id="totalLoanCosts">1,910.00</span></span>
+        </div>
+
+        <!-- Bucket 1: Lender Fees -->
+        <div class="cost-sub-head">Lender Fees</div>
+        <div class="cost-row">
+          <span id="lenderFeesBucketLabel">Loan Administration</span>
+          <span class="cr-amt">$<input class="ei ei-amt bucket-input" id="lenderFeesBucketAmt" value="999" oninput="onBucketEdit('lender'); recalc()" onblur="fmtBucket('lenderFeesBucketAmt')"/></span>
+        </div>
+        <div class="cost-row" id="compBucketRow">
+          <span id="compBucketLabel">Loan Origination (Broker)</span>
+          <span class="cr-amt">$<input class="ei ei-amt bucket-input" id="compBucketAmt" value="3,000" oninput="onBucketEdit('comp'); recalc()" onblur="fmtBucket('compBucketAmt')"/></span>
+        </div>
+
+        <!-- Bucket 2: Third-Party Fees -->
+        <div class="cost-sub-head">Third-Party &amp; Government Fees</div>
+        <div class="cost-row">
+          <span id="titleBucketLabel">Title &amp; Signing Services</span>
+          <span class="cr-amt">$<input class="ei ei-amt bucket-input" id="titleBucketAmt" value="510" oninput="onBucketEdit('title'); recalc()" onblur="fmtBucket('titleBucketAmt')"/></span>
+        </div>
+        <div class="cost-row">
+          <span>Credit &amp; Property Verification</span>
+          <span class="cr-amt">$<input class="ei ei-amt bucket-input" id="complianceBucketAmt" value="111" oninput="onBucketEdit('compliance'); recalc()" onblur="fmtBucket('complianceBucketAmt')"/></span>
+        </div>
+        <div class="cost-row">
+          <span>County Recording &amp; Filing</span>
+          <span class="cr-amt">$<input class="ei ei-amt bucket-input" id="recordingBucketAmt" value="140" oninput="onBucketEdit('recording'); recalc()" onblur="fmtBucket('recordingBucketAmt')"/></span>
+        </div>
+        <div class="cost-row" id="appraisalBucketRow">
+          <span>Appraisal / Valuation</span>
+          <span class="cr-amt">$<input class="ei ei-amt bucket-input" id="appraisalBucketAmt" value="0" oninput="onBucketEdit('appraisal'); recalc()" onblur="fmtBucket('appraisalBucketAmt')"/></span>
+        </div>
+
+        <div class="cost-grand"><span>Total Setup Costs</span><span>$<span id="grandLoanCosts">1,910.00</span></span></div>
+      </div>
+
+      <!-- CASH / DRAW BREAKDOWN -->
+      <div class="cost-card">
+        <div class="cost-card-head">
+          <span class="cch-title" id="cashCardTitle">Cash Out Breakdown</span>
+          <span class="cch-total"> </span>
+        </div>
+
+        <div class="cost-row"><span id="ctcLoanLabel">Total Loan Amount</span><span class="cr-amt">$<span id="ctcLoanAmt">100,000.00</span></span></div>
+        <div class="cost-row" id="ctcDrawRow">
+          <span><strong>Initial Draw</strong></span>
+          <span class="cr-amt"><strong>$<span id="ctcDraw">100,000.00</span></strong></span>
+        </div>
+
+        <!-- PAYOFF — single always-visible editable row -->
+        <div class="cost-row payoff-row" id="payoffRow">
+          <input class="payoff-row-input payoff-label ei" id="payoffLabel" type="text" placeholder="Payoff (optional)" oninput="updatePayoffTotal()"/>
+          <span class="cr-amt" style="display:inline-flex;align-items:baseline;gap:0;"><span id="payoffSign">&#x2212;$</span><input class="payoff-row-input payoff-amt ei ei-amt" id="payoffAmt" type="text" placeholder="0" value="" size="8" oninput="updatePayoffTotal()" onblur="this.value=this.value?fmt(evalExpr(this.value)):'';updatePayoffTotal()"/></span>
+        </div>
+
+        <div class="cost-row"><span>Setup Costs</span><span class="cr-amt">−$<span id="ctcCC">1,910.00</span></span></div>
+
+        <div class="cash-total" id="ctcCashTotal">
+          <div class="cash-label" id="ctcLabel">Credit Available to You</div>
+          <div class="cash-amount" id="ctcCash">$98,090.00</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer">
+    <p>This is not an official Loan Estimate. Rates, fees, and terms are subject to change based on final underwriting, appraisal, and market conditions. A formal Loan Estimate will be provided within 3 business days of a complete loan application. CLTV eligibility and product availability vary by lender and are subject to approval. Spring EQ rates based on 02/24/2026 rate sheet; Quorum rates based on 01/13/2026 rate sheet. Current Prime Rate used: <span id="primeDisplay">7.50</span>%.</p>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="page-footer">
+    <div class="footer-advisor">
+      <div class="fa-name"><span id="advisorNameDisplay">Harry Carwile</span></div>
+      <div class="fa-title"><span id="advisorTitleDisplay">Senior Mortgage Consultant</span> · NMLS# <span id="advisorNmlsDisplay">2134940</span> · Loan Pronto</div>
+    </div>
+    <div class="footer-phone-pill">
+      <span class="fpp-icon">📞</span>
+      <div>
+        <div class="fpp-number"><span id="advisorPhoneDisplay">(704) 307-4482</span></div>
+        <div class="fpp-cta">Call or text anytime</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<!-- EMAIL / SMS GENERATOR PANEL -->
+<div class="gen-panel" id="genPanel">
+  <div class="gen-header">
+    <div class="gen-title">✉ Generate Email / SMS</div>
+    <button class="gen-close" id="genCloseBtn">✕</button>
+  </div>
+  <div class="gen-body">
+    <div class="gen-tabs">
+      <button class="gen-tab active" data-tab="email">Email</button>
+      <button class="gen-tab" data-tab="sms">SMS</button>
+      <button class="gen-tab" data-tab="followup">Follow-Up</button>
+    </div>
+    <div class="gen-output-wrap">
+      <textarea class="gen-output" id="genOutput" readonly placeholder="Click Generate to create your message…"></textarea>
+      <button class="gen-copy-btn" id="genCopyBtn">Copy</button>
+    </div>
+    <div class="gen-actions">
+      <button class="gen-regen" id="genRegenerateBtn">↺ Generate</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// CONFIG — All matrices and fee defaults live here. Edit freely.
+// ═══════════════════════════════════════════════════════════════════
+
+let PRIME = 7.50; // Default; overridden by qi_prime input
+function getPrime() {
+  const el = document.getElementById('qi_prime');
+  if (el) {
+    const v = parseFloat(el.value);
+    if (!isNaN(v) && v > 0) return v;
+  }
+  return PRIME;
+}
+
+// ── SPRING HELOC MARGIN MATRIX (Above Prime) ──────────────────────
+// Rows = FICO buckets, Cols = CLTV buckets
+// CLTV cols: <=60, >60-65, >65-70, >70-75, >75-80, >80-85, >85-90, >90-95
+// null = not available
+const SPRING_HELOC_MATRIX = {
+  '780':  [-0.650, -0.650, -0.475, -0.225,  0.025,  1.405,  2.075,  null],
+  '760':  [-0.650, -0.650, -0.475, -0.225,  0.025,  1.405,  2.075,  null],
+  '740':  [-0.475, -0.475, -0.225, -0.225,  0.655,  1.655,  2.325,  null],
+  '720':  [-0.225, -0.225, -0.225,  0.025,  1.025,  1.905,  2.755,  null],
+  '700':  [-0.095,  0.025,  0.155,  0.655,  1.405,  2.405,  3.505,  null],
+  '680':  [ 1.155,  1.405,  1.655,  1.905,  2.405,  3.405,  5.325,  null],
+  '660':  [ 2.075,  2.455,  2.705,  2.955,  3.825,  null,   null,   null],
+  '640':  [ 3.125,  3.505,  3.825,  null,   null,   null,   null,   null],
+};
+
+// CLTV column boundaries for Spring HELOC (upper bound, <=)
+const SPRING_HELOC_CLTV_COLS = [60, 65, 70, 75, 80, 85, 90, 95];
+
+// Spring HELOC margin adjustments
+const SPRING_HELOC_ADJ = {
+  investment:   1.25,
+  firstLien:   -0.25,  // if 1st lien HELOC (not applicable for 2nd lien tool)
+  dti45_50:     0.25,
+  units2_4:     0.25,
+  term30yr:     0.375,
+  piggyback:    3.00,
+  drawUnder100k: 0.50,
+};
+
+// Spring LPC margin add-ons (comp → margin add)
+const SPRING_LPC_MARGIN = {
+  '2.00': 0.800, '1.75': 0.700, '1.50': 0.600, '1.25': 0.500,
+  '1.00': 0.400, '0.75': 0.300, '0.50': 0.200, '0.25': 0.100,
+};
+
+// ── SPRING HELOAN RATE MATRICES ───────────────────────────────────
+// CLTV cols: <=60, >60-65, >65-70, >70-75, >75-80, >80-85, >85-90, >90-95
+const SPRING_HELOAN_10_20_MATRIX = {
+  '780':  [6.075,  6.075,  6.325,  7.325,  7.575,  8.375,  9.725,  null],
+  '760':  [6.325,  6.325,  6.575,  7.325,  7.575,  8.375,  9.725,  null],
+  '740':  [6.575,  6.575,  7.200,  7.450,  7.700,  8.425,  9.975,  null],
+  '720':  [6.950,  6.950,  7.450,  7.825,  8.325,  8.575, 10.450,  null],
+  '700':  [7.325,  7.325,  8.075,  8.325,  8.575,  9.325, 11.175,  null],
+  '680':  [8.450,  8.450,  9.075,  9.325, 10.150, 11.100, 12.575,  null],
+  '660':  [9.925, 10.300, 10.550, 10.800, 11.725,  null,   null,   null],
+  '640':  [10.825, 11.200, 11.450,  null,   null,   null,   null,   null],
+};
+
+const SPRING_HELOAN_30_MATRIX = {
+  '780':  [6.850,  6.850,  7.100,  7.600,  7.850,  8.725, 10.775,  null],
+  '760':  [6.975,  6.975,  7.225,  7.600,  7.850,  8.725, 10.900,  null],
+  '740':  [7.475,  7.475,  7.600,  7.725,  7.975,  9.025, 11.150,  null],
+  '720':  [7.600,  7.600,  7.725,  7.975,  8.350,  9.275, 11.400,  null],
+  '700':  [7.975,  7.975,  8.225,  8.600,  8.850,  9.975, 12.400,  null],
+  '680':  [8.725,  8.725,  9.225,  9.475, 11.000, 12.125, 14.300,  null],
+  '660':  [10.875, 11.250, 11.500, 11.875, 13.000,  null,   null,   null],
+  '640':  [12.050, 12.550, 12.925,  null,   null,   null,   null,   null],
+};
+
+// Spring HELOAN rate adjustments
+const SPRING_HELOAN_ADJ = {
+  investment:  1.50,
+  units2_4:    0.50,
+  dti45_50:    0.25,
+  piggyback:   3.00,
+};
+
+// Spring HELOAN loan amount adjustments
+const SPRING_HELOAN_AMT_ADJ = [
+  { min: 100000, max: 199999, adj: -0.125 },
+  { min: 200000, max: 299999, adj: -0.250 },
+  { min: 300000, max: Infinity, adj: -0.375 },
+];
+
+// Spring LPC rate add-ons
+const SPRING_LPC_RATE = {
+  '2.00': 0.800, '1.75': 0.700, '1.50': 0.600, '1.25': 0.500,
+  '1.00': 0.400, '0.75': 0.300, '0.50': 0.200, '0.25': 0.100,
+};
+
+// ── SPRING FEE DEFAULTS ────────────────────────────────────────────
+const SPRING_FEES = {
+  heloc: {
+    adminFee: 999, annualFee: 99,
+    creditReport: 26, flood: 7.50, docPrep: 39.50, mers: 24.95,
+    avm: 45, driveby: 150,
+    titleSmall: 80,   // < 250k
+    notary: 290, texasAttorney: 200, cdaPci: 110,
+    recording: 140, origination: 0, processing: 0,
+  },
+  heloan: {
+    adminFee: 799, annualFee: 0,
+    creditReport: 26, flood: 7.50, docPrep: 39.50, mers: 24.95,
+    avm: 45, driveby: 150,
+    titleSmall: 80,
+    notary: 290, texasAttorney: 200, cdaPci: 110,
+    recording: 140, origination: 0, processing: 0,
+  },
+  fixline: {
+    adminFee: 999, annualFee: 99,
+    creditReport: 26, flood: 7.50, docPrep: 39.50, mers: 24.95,
+    avm: 45, driveby: 150,
+    titleSmall: 80,
+    notary: 290, texasAttorney: 200, cdaPci: 110,
+    recording: 140, origination: 0, processing: 0,
+  },
+};
+
+// ── QUORUM HELOC RATE MATRIX ──────────────────────────────────────
+// Rows = FICO, Cols = CLTV (0-60, 60.01-70, 70.01-80, 80.01-85, 85.01-90, 90.01-95)
+// Values = margin above Prime
+const QUORUM_HELOC_MATRIX = {
+  '800':  [-0.125, 0.125, 0.375, 0.625, 1.375, 3.125],
+  '780':  [ 0.375, 0.375, 0.625, 0.875, 1.625, 3.125],
+  '760':  [ 0.625, 0.875, 1.125, 1.375, 2.125, 3.250],
+  '740':  [ 0.875, 1.125, 1.375, 1.500, 2.250, 3.375],
+  '720':  [ 1.625, 1.625, 1.875, 2.000, 2.500, 3.875],
+  '700':  [ 2.625, 2.625, 2.875, 3.375, 4.125, null ],
+  '680':  [ 3.375, 3.500, 3.625, 3.750, 5.125, null ],
+};
+
+// Quorum HELOC CLTV column boundaries (upper bound)
+const QUORUM_HELOC_CLTV_COLS = [60, 70, 80, 85, 90, 95];
+
+// Quorum HELOC margin add-ons
+const QUORUM_HELOC_ADJ = {
+  amtUnder50k: 0.500,
+  secondHome:  0.500,
+};
+
+// ── QUORUM HELOAN RATE MATRIX ─────────────────────────────────────
+// Source: 10-Year base rates from Quorum matrix (01/13/2026)
+// CLTV cols: 0-60, 60.01-70, 70.01-80, 80.01-85, 85.01-90
+const QUORUM_HELOAN_MATRIX = {
+  '800':  [6.375, 6.375, 7.125, 7.750, 8.875],
+  '780':  [6.500, 6.500, 7.250, 7.750, 8.875],
+  '760':  [6.500, 6.500, 7.250, 7.750, 8.875],
+  '740':  [7.000, 7.000, 7.375, 8.000, 9.125],
+  '720':  [7.250, 7.250, 7.625, 8.250, 9.625],
+  '700':  [7.500, 7.500, 7.875, 8.750, 10.375],
+  '680':  [7.750, 7.875, 8.500, 10.375, 11.725],
+  '660':  [9.250, 9.625, 10.125, null, null],
+  '640':  [10.125, 10.500, 11.125, null, null],
+};
+
+// Quorum HELOAN CLTV col bounds
+const QUORUM_HELOAN_CLTV_COLS = [60, 70, 80, 85, 90];
+
+// Quorum HELOAN rate add-ons
+const QUORUM_HELOAN_ADJ = {
+  amtUnder100k:  0.250,
+  secondHome:    0.250,
+  term15yr:      0.250,
+  term20yr:      0.375,
+};
+
+// ── QUORUM FEE DEFAULTS ────────────────────────────────────────────
+const QUORUM_FEES = {
+  origination: 495, processing: 100, flood: 6,
+  creditReportSingle: 87.15, creditReportJoint: 174.30,
+  titleSmall: 350,  // property report placeholder < 250k
+  titleLarge: 800,  // title insurance placeholder >= 250k
+  recording: 120,
+};
+
+// ── UWM HELOC (existing logic – placeholder) ──────────────────────
+// Kept as a standalone block. Extend separately.
+const UWM_FEES = {
+  origination: 0, creditReport: 175, title: 1400,
+  misc: 55, recording: 140, appraisal: 0, adminBase: 220,
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// PRODUCT DEFINITIONS
+// ═══════════════════════════════════════════════════════════════════
+const PRODUCTS = {
+  spring_heloc: {
+    name: 'Spring HELOC', lender: 'Spring EQ', family: 'heloc',
+    label: 'Home Equity Line of Credit',
+    structure: 'Prime + Margin', drawYears: 3, repayYears: 20,
+    payType: 'Interest-Only', annualFee: 99,
+    floorRate: 4.00, lifetimeCap: 18.00,
+    minAmt: 50000, maxAmt: 500000,
+    lenderGroup: 'spring',
+  },
+  quorum_heloc: {
+    name: 'Quorum HELOC', lender: 'Quorum Federal CU', family: 'heloc',
+    label: 'Home Equity Line of Credit',
+    structure: 'Prime + Margin', drawYears: 10, repayYears: 20,
+    payType: 'Interest-Only', annualFee: 0,
+    floorRate: 4.95, lifetimeCap: 18.00,
+    minAmt: 25000, maxAmt: 400000,
+    lenderGroup: 'quorum',
+  },
+  uwm_heloc: {
+    name: 'UWM HELOC', lender: 'United Wholesale Mortgage', family: 'heloc',
+    label: 'Home Equity Line of Credit',
+    structure: 'Prime + Margin', drawYears: 3, repayYears: 25,
+    payType: 'Interest-Only', annualFee: 0,
+    floorRate: 3.00, lifetimeCap: 18.00,
+    minAmt: 25000, maxAmt: 500000,
+    lenderGroup: 'uwm',
+  },
+  spring_heloan: {
+    name: 'Spring HELOAN', lender: 'Spring EQ', family: 'heloan',
+    label: 'Home Equity Loan (Fixed)',
+    structure: 'Fixed Rate', termYears: 20,
+    payType: 'Principal & Interest', annualFee: 0,
+    minAmt: 50000, maxAmt: 500000,
+    lenderGroup: 'spring',
+  },
+  quorum_heloan: {
+    name: 'Quorum HELOAN', lender: 'Quorum Federal CU', family: 'heloan',
+    label: 'Home Equity Loan (Fixed)',
+    structure: 'Fixed Rate', termYears: 10,
+    payType: 'Principal & Interest', annualFee: 0,
+    minAmt: 50000, maxAmt: 500000,
+    lenderGroup: 'quorum',
+  },
+};
+
+let activeProduct = 'spring_heloc';
+
+// ═══════════════════════════════════════════════════════════════════
+// HELPER FUNCTIONS
+// ═══════════════════════════════════════════════════════════════════
+
+/** Map FICO score → matrix row key for Spring */
+function getFicoBucketSpring(fico) {
+  if (fico >= 780) return '780';
+  if (fico >= 760) return '760';
+  if (fico >= 740) return '740';
+  if (fico >= 720) return '720';
+  if (fico >= 700) return '700';
+  if (fico >= 680) return '680';
+  if (fico >= 660) return '660';
+  if (fico >= 640) return '640';
+  return null;
+}
+
+/** Map FICO score → matrix row key for Quorum HELOC */
+function getFicoBucketQuorumHeloc(fico) {
+  if (fico >= 800) return '800';
+  if (fico >= 780) return '780';
+  if (fico >= 760) return '760';
+  if (fico >= 740) return '740';
+  if (fico >= 720) return '720';
+  if (fico >= 700) return '700';
+  if (fico >= 680) return '680';
+  return null; // below 680 ineligible
+}
+
+/** Map FICO score → matrix row key for Quorum HELOAN */
+function getFicoBucketQuorumHeloan(fico) {
+  if (fico >= 800) return '800';
+  if (fico >= 780) return '780';
+  if (fico >= 760) return '760';
+  if (fico >= 740) return '740';
+  if (fico >= 720) return '720';
+  if (fico >= 700) return '700';
+  if (fico >= 680) return '680';
+  if (fico >= 660) return '660';
+  if (fico >= 640) return '640';
+  return null; // below 640 ineligible
+}
+
+/** Map CLTV → column index for a given set of upper bounds */
+function getCltvColIndex(cltv, colBounds) {
+  for (let i = 0; i < colBounds.length; i++) {
+    if (cltv <= colBounds[i]) return i;
+  }
+  return null; // exceeds max
+}
+
+/** Friendly CLTV bucket label for display */
+function cltvBucketLabel(cltv, colBounds) {
+  const idx = getCltvColIndex(cltv, colBounds);
+  if (idx === null) return '>' + colBounds[colBounds.length - 1] + '%';
+  if (idx === 0) return '≤' + colBounds[0] + '%';
+  return '>' + colBounds[idx - 1] + '–' + colBounds[idx] + '%';
+}
+
+/** Get Spring HELOC base margin from matrix */
+function getSpringHelocBaseMargin(fico, cltv) {
+  const ficoBucket = getFicoBucketSpring(fico);
+  if (!ficoBucket) return null;
+  const colIdx = getCltvColIndex(cltv, SPRING_HELOC_CLTV_COLS);
+  if (colIdx === null) return null;
+  const row = SPRING_HELOC_MATRIX[ficoBucket];
+  if (!row || row[colIdx] === null || row[colIdx] === undefined) return null;
+  return row[colIdx];
+}
+
+/** Get Spring HELOAN base rate from matrix */
+function getSpringHeloanBaseRate(fico, cltv, use30yr) {
+  const ficoBucket = getFicoBucketSpring(fico);
+  if (!ficoBucket) return null;
+  const colIdx = getCltvColIndex(cltv, SPRING_HELOC_CLTV_COLS); // same CLTV cols as HELOC
+  if (colIdx === null) return null;
+  const matrix = use30yr ? SPRING_HELOAN_30_MATRIX : SPRING_HELOAN_10_20_MATRIX;
+  const row = matrix[ficoBucket];
+  if (!row || row[colIdx] === null || row[colIdx] === undefined) return null;
+  return row[colIdx];
+}
+
+/** Get Quorum HELOC base margin from matrix */
+function getQuorumHelocBaseMargin(fico, cltv) {
+  const ficoBucket = getFicoBucketQuorumHeloc(fico);
+  if (!ficoBucket) return null;
+  const colIdx = getCltvColIndex(cltv, QUORUM_HELOC_CLTV_COLS);
+  if (colIdx === null) return null;
+  const row = QUORUM_HELOC_MATRIX[ficoBucket];
+  if (!row || row[colIdx] === null || row[colIdx] === undefined) return null;
+  return row[colIdx];
+}
+
+/** Get Quorum HELOAN base rate from matrix */
+function getQuorumHeloanBaseRate(fico, cltv) {
+  const ficoBucket = getFicoBucketQuorumHeloan(fico);
+  if (!ficoBucket) return null;
+  const colIdx = getCltvColIndex(cltv, QUORUM_HELOAN_CLTV_COLS);
+  if (colIdx === null) return null;
+  const row = QUORUM_HELOAN_MATRIX[ficoBucket];
+  if (!row || row[colIdx] === null || row[colIdx] === undefined) return null;
+  return row[colIdx];
+}
+
+/** Get Quorum title mode: 'property_report' or 'title_insurance' */
+function getQuorumTitleMode(loanAmt) {
+  return loanAmt < 250000 ? 'property_report' : 'title_insurance';
+}
+
+/** Parse comp selection → { isLpc, lpcPct, bpcPct } */
+function parseComp() {
+  const sel = document.getElementById('qi_comp').value;
+  if (sel === 'lpc_2')     return { isLpc: true,  lpcPct: 2.00, bpcPct: 0 };
+  if (sel === 'lpc_1_75')  return { isLpc: true,  lpcPct: 1.75, bpcPct: 0 };
+  if (sel === 'lpc_1_5')   return { isLpc: true,  lpcPct: 1.50, bpcPct: 0 };
+  if (sel === 'lpc_1_25')  return { isLpc: true,  lpcPct: 1.25, bpcPct: 0 };
+  if (sel === 'lpc_1_0')   return { isLpc: true,  lpcPct: 1.00, bpcPct: 0 };
+  if (sel === 'lpc_0_75')  return { isLpc: true,  lpcPct: 0.75, bpcPct: 0 };
+  if (sel === 'lpc_0_5')   return { isLpc: true,  lpcPct: 0.50, bpcPct: 0 };
+  if (sel === 'lpc_0_25')  return { isLpc: true,  lpcPct: 0.25, bpcPct: 0 };
+  if (sel === 'bpc_3')     return { isLpc: false, lpcPct: 0, bpcPct: 3.00 };
+  if (sel === 'bpc_custom') {
+    let v = parseFloat(document.getElementById('qi_customComp').value) || 0;
+    v = Math.min(v, 3.00); // cap at 3% for Spring/Quorum
+    return { isLpc: false, lpcPct: 0, bpcPct: v };
+  }
+  return { isLpc: false, lpcPct: 0, bpcPct: 3.00 };
+}
+
+/** Get LPC rate/margin add-on for Spring */
+function getSpringLpcAdj(lpcPct, isHeloc) {
+  const key = lpcPct.toFixed(2);
+  if (isHeloc) return SPRING_LPC_MARGIN[key] || 0;
+  return SPRING_LPC_RATE[key] || 0;
+}
+
+/** Calc interest-only payment */
+function calcInterestOnlyPayment(principal, annualRatePct) {
+  return principal * (annualRatePct / 100) / 12;
+}
+
+/** Calc fully amortized P&I payment */
+function calcAmortizedPayment(principal, annualRatePct, years) {
+  const r = (annualRatePct / 100) / 12;
+  const n = years * 12;
+  if (!r) return principal / n;
+  return principal * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+}
+
+/** Eligibility check — returns array of issue strings (empty = eligible) */
+function getEligibilityFlags(productKey, loanAmt, cltv, fico, occupancy, state, isSelfEmployed) {
+  const p = PRODUCTS[productKey];
+  const issues = [];
+  const st = (state || '').toUpperCase().trim();
+
+  if (productKey === 'quorum_heloc' || productKey === 'quorum_heloan') {
+    if (st === 'TX') issues.push('Not available in Texas');
+    if (fico < 680 && productKey === 'quorum_heloc') issues.push('Min FICO 680');
+    if (fico < 640 && productKey === 'quorum_heloan') issues.push('Min FICO 640');
+    if (loanAmt < p.minAmt) issues.push(`Min loan $${p.minAmt.toLocaleString()}`);
+    if (loanAmt > p.maxAmt) issues.push(`Max loan $${p.maxAmt.toLocaleString()}`);
+    if (cltv > 90 && productKey === 'quorum_heloan') issues.push('Max CLTV 90%');
+    if (occupancy === 'investment') issues.push('Investment property ineligible');
+    if (isSelfEmployed && productKey === 'quorum_heloc') issues.push('Self-employed not permitted');
+  }
+  if (productKey === 'spring_heloc' || productKey === 'spring_heloan') {
+    if (loanAmt < p.minAmt) issues.push(`Min loan $${p.minAmt.toLocaleString()}`);
+    if (loanAmt > p.maxAmt) issues.push(`Max loan $${p.maxAmt.toLocaleString()}`);
+    if (loanAmt >= 400000 && fico < 740) issues.push('≥$400K requires 740+ FICO');
+    if (fico < 640) issues.push('Min FICO 640');
+  }
+  return issues;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════════════
+function g(id) { return evalExpr(document.getElementById(id).value); }
+function set(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+// setVal: sets value on input OR textContent on span — used for bucket amounts which are now inputs
+function setVal(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (el.tagName === 'INPUT') { if (!el.dataset.overridden) el.value = val; }
+  else el.textContent = val;
+}
+function show(id, vis) { const el = document.getElementById(id); if (el) el.style.display = vis ? '' : 'none'; }
+
+// Track which bucket inputs have been manually overridden so recalc doesn't clobber them
+const _bucketOverrides = {};
+function onBucketEdit(key) { _bucketOverrides[key] = true; }
+function fmtBucket(id) {
+  const el = document.getElementById(id);
+  if (el) el.value = fmt(evalExpr(el.value));
+}
+function clearBucketOverrides() {
+  Object.keys(_bucketOverrides).forEach(k => delete _bucketOverrides[k]);
+  // Also clear dataset flags
+  ['lenderFeesBucketAmt','compBucketAmt','titleBucketAmt','complianceBucketAmt','recordingBucketAmt','appraisalBucketAmt'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) delete el.dataset.overridden;
+  });
+}
+
+function evalExpr(str) {
+  let clean = String(str || '').replace(/[$,\s]/g, '');
+  if (!clean) return 0;
+  if (clean[0] === '=') clean = clean.slice(1);
+  if (!/^[0-9+\-*/().]+$/.test(clean)) return parseFloat(clean) || 0;
+  try { const r = Function('"use strict";return(' + clean + ')')(); return isFinite(r) ? r : 0; } catch (e) { return parseFloat(clean) || 0; }
+}
+
+function fmt(v) {
+  const r = Math.round(v * 100) / 100;
+  return r === Math.floor(r) ? Math.round(r).toLocaleString('en-US') : r.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function fmtFull(v) { return v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function evalAmt(el) { el.value = fmt(evalExpr(el.value)); recalc(); }
+function evalDrawAmt(el) {
+  const creditLimit = g('loanAmount');
+  let val = evalExpr(el.value);
+  if (val > creditLimit) val = creditLimit;
+  el.value = fmt(val);
+  recalc();
+}
+function autosizeInput(el, min = 3, max = 14) {
+  const v = (el.value ?? '').toString();
+  el.style.width = (Math.min(Math.max(v.length, min), max) + 0.5) + 'ch';
+}
+function autosizeAll() { document.querySelectorAll('input.autosize').forEach(el => autosizeInput(el)); }
+document.addEventListener('input', e => { if (e.target.classList.contains('autosize')) autosizeInput(e.target); });
+
+// ═══════════════════════════════════════════════════════════════════
+// PRODUCT SWITCHER
+// ═══════════════════════════════════════════════════════════════════
+function switchProduct(productKey) {
+  activeProduct = productKey;
+  const p = PRODUCTS[productKey];
+  clearBucketOverrides();
+
+  document.querySelectorAll('.ps-btn').forEach(b => b.classList.toggle('active', b.dataset.product === productKey));
+  set('headerProductLabel', p.label);
+  set('stripProductName', p.name);
+  set('primeDisplay', getPrime().toFixed(2));
+
+  // Product strip detail
+  if (p.family === 'heloc') {
+    set('stripProductDetail', `${p.structure} · ${p.drawYears}-Year Draw · Interest-Only Payments`);
+  } else {
+    set('stripProductDetail', `${p.structure} · Fixed Term · P&I Payments`);
+  }
+
+  if (p.annualFee > 0) {
+    set('stripAnnualFee', `$${p.annualFee}/yr Annual Fee`);
+    show('stripSep2', true); show('stripAnnualFee', true);
+  } else {
+    show('stripSep2', false); show('stripAnnualFee', false);
+  }
+
+  // Hero labels
+  if (p.family === 'heloc') {
+    set('heroRateLabel', 'Interest Rate (Prime + Margin)');
+    set('heroPayLabel', 'Estimated Monthly Payment');
+    set('heroCashLabel', 'Initial Draw / Cash to You');
+    set('rateStructureLabel', 'Rate Structure');
+    set('payTypeLabel', 'Interest-Only Payment');
+    show('drawPeriodRow', true); show('repayPeriodRow', true);
+    set('heroDrawPeriod', p.drawYears + ' years');
+    set('heroRepayPeriod', p.repayYears + ' years');
+    show('cbDrawRow', true);
+    set('cashCardTitle', 'Cash Out Breakdown');
+    set('ctcLabel', 'Credit Available to You');
+    set('ctcLoanLabel', 'Credit Limit');
+    set('cbLoanLabel', 'Credit Limit');
+    show('ctcDrawRow', true);
+    set('snapLoanLabel', 'Credit Limit');
+    show('snapDrawItem', true);
+    document.querySelector('.snapshot').classList.remove('heloan-mode');
+  } else {
+    set('heroRateLabel', 'Fixed Interest Rate');
+    set('heroPayLabel', 'Estimated Monthly Payment');
+    set('heroCashLabel', 'Cash to You at Closing');
+    set('rateStructureLabel', 'Loan Term');
+    set('payTypeLabel', 'Principal & Interest');
+    show('drawPeriodRow', false); show('repayPeriodRow', false);
+    show('cbDrawRow', false);
+    set('cashCardTitle', 'Cash Out Breakdown');
+    set('ctcLabel', 'Cash to You at Closing');
+    set('ctcLoanLabel', 'Loan Amount');
+    set('cbLoanLabel', 'Loan Amount');
+    show('ctcDrawRow', false);
+    set('snapLoanLabel', 'Loan Amount');
+    show('snapDrawItem', false);
+    document.querySelector('.snapshot').classList.add('heloan-mode');
+  }
+
+  // Wire term options visibility
+  const termSel = document.getElementById('qi_term');
+  const termRow = document.getElementById('qi_termRow');
+  const termLabel = document.getElementById('qi_termLabel');
+  // Reset options
+  while (termSel.options.length) termSel.remove(0);
+  if (p.family === 'heloc') {
+    termLabel.textContent = 'Draw Term';
+    termRow.style.display = '';
+    [['20', '20-Year (default)'], ['30', '30-Year (+0.375% – Spring only)']].forEach(([v, l]) => {
+      const o = new Option(l, v);
+      termSel.add(o);
+    });
+  } else {
+    termLabel.textContent = 'Loan Term';
+    termRow.style.display = '';
+    const opts = productKey === 'spring_heloan'
+      ? [['20', '20-Year'], ['30', '30-Year'], ['10', '10-Year']]
+      : [['10', '10-Year'], ['15', '15-Year'], ['20', '20-Year']];
+    opts.forEach(([v, l]) => { termSel.add(new Option(l, v)); });
+  }
+
+  // Show/hide LPC option validity note
+  updateCompVisibility(productKey);
+
+  // Pre-load fees then recalc
+  loadDefaultFees(productKey);
+  recalc();
+}
+
+function updateCompVisibility(productKey) {
+  const compSel = document.getElementById('qi_comp');
+  const isSpring = productKey === 'spring_heloc' || productKey === 'spring_heloan';
+  // Disable LPC options for non-Spring
+  Array.from(compSel.options).forEach(opt => {
+    if (opt.value.startsWith('lpc_')) {
+      opt.disabled = !isSpring;
+      if (opt.disabled && opt.selected) { compSel.value = 'bpc_3'; }
+    }
+  });
+  show('qi_customCompRow', compSel.value === 'bpc_custom');
+}
+
+function loadDefaultFees(productKey) {
+  const loanAmt = g('loanAmount');
+  const isJoint = document.getElementById('qi_borrowers').value === 'joint';
+
+  // Zero out all optional fees first so cross-product math is clean
+  ['docPrepFee','mersFee','notaryFee','avmFee','appraisalFee'].forEach(id => {
+    document.getElementById(id).value = '0';
+  });
+
+  if (productKey === 'spring_heloc' || productKey === 'spring_heloan' || productKey === 'spring_fixline') {
+    const f = SPRING_FEES[productKey === 'spring_heloan' ? 'heloan' : 'heloc'];
+    document.getElementById('adminFee').value      = fmt(f.adminFee);
+    document.getElementById('originationFee').value = '0';
+    document.getElementById('processingFee').value  = '0';
+    document.getElementById('creditReport').value  = fmt(f.creditReport);
+    document.getElementById('floodFee').value      = fmt(f.flood);
+    document.getElementById('docPrepFee').value    = fmt(f.docPrep);
+    document.getElementById('mersFee').value       = fmt(f.mers);
+    document.getElementById('notaryFee').value     = fmt(f.notary);
+    document.getElementById('avmFee').value        = fmt(f.avm);
+    document.getElementById('titleFees').value     = loanAmt < 250000 ? fmt(f.titleSmall) : '0';
+    document.getElementById('recordingFee').value  = fmt(f.recording);
+
+  } else if (productKey === 'quorum_heloc' || productKey === 'quorum_heloan') {
+    const f = QUORUM_FEES;
+    document.getElementById('adminFee').value      = '0';
+    document.getElementById('originationFee').value = fmt(f.origination);
+    document.getElementById('processingFee').value  = fmt(f.processing);
+    document.getElementById('creditReport').value  = fmt(isJoint ? f.creditReportJoint : f.creditReportSingle);
+    document.getElementById('floodFee').value      = fmt(f.flood);
+    const titleMode = getQuorumTitleMode(loanAmt);
+    document.getElementById('titleFees').value     = titleMode === 'property_report' ? fmt(f.titleSmall) : fmt(f.titleLarge);
+    document.getElementById('recordingFee').value  = fmt(f.recording);
+
+  } else if (productKey === 'uwm_heloc') {
+    const f = UWM_FEES;
+    document.getElementById('adminFee').value      = fmt(f.adminBase);
+    document.getElementById('originationFee').value = '0';
+    document.getElementById('processingFee').value  = '0';
+    document.getElementById('creditReport').value  = fmt(f.creditReport);
+    document.getElementById('floodFee').value      = '0';
+    document.getElementById('titleFees').value     = fmt(f.title);
+    document.getElementById('recordingFee').value  = fmt(f.recording);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// MAIN RECALC
+// ═══════════════════════════════════════════════════════════════════
+function recalc() {
+  autosizeAll();
+  const p = PRODUCTS[activeProduct];
+  const loanAmt   = g('loanAmount');
+  const propVal   = g('propValue');
+  const firstBal  = g('firstBalance');
+  const fico      = g('creditScore');
+  const occupancy = document.getElementById('qi_occupancy').value;
+  const state     = document.getElementById('qi_state').value || '';
+  const isJoint   = document.getElementById('qi_borrowers').value === 'joint';
+  const termVal   = parseInt(document.getElementById('qi_term').value) || 20;
+  const comp      = parseComp();
+
+  // CLTV
+  const cltv = propVal > 0 ? ((loanAmt + firstBal) / propVal) * 100 : 0;
+  set('cltvDisplay', propVal > 0 ? cltv.toFixed(1) + '%' : '—');
+
+  // Show/hide custom comp input
+  show('qi_customCompRow', document.getElementById('qi_comp').value === 'bpc_custom');
+
+  // Eligibility
+  const issues = getEligibilityFlags(activeProduct, loanAmt, cltv, fico, occupancy, state, false);
+  const ineligible = issues.length > 0;
+  const ineligMsg = issues.join(' · ');
+  const msgEl = document.getElementById('qi_ineligibleMsg');
+  if (ineligible) {
+    msgEl.style.display = '';
+    msgEl.textContent = '⚠ ' + ineligMsg;
+  } else {
+    msgEl.style.display = 'none';
+  }
+  set('stripIneligible', ineligible ? '⚠ ' + ineligMsg : '');
+  document.getElementById('stripIneligible').style.display = ineligible ? '' : 'none';
+
+  // ── RATE CALCULATION ─────────────────────────────────────────────
+  let finalRate = null;
+  let rateStructureStr = '';
+  let fitLabel = '';
+  let fitVal = '';
+
+  if (p.lenderGroup === 'spring' && p.family === 'heloc') {
+    // Spring HELOC
+    let baseMargin = getSpringHelocBaseMargin(fico, cltv);
+    if (baseMargin !== null) {
+      let adj = 0;
+      if (occupancy === 'investment') adj += SPRING_HELOC_ADJ.investment;
+      if (occupancy === 'second') adj += 0; // no second home adj listed for HELOC
+      const draw = Math.min(g('initialDraw'), loanAmt);
+      if (draw < 100000) adj += SPRING_HELOC_ADJ.drawUnder100k;
+      if (termVal === 30) adj += SPRING_HELOC_ADJ.term30yr;
+      // LPC comp adj
+      if (comp.isLpc) adj += getSpringLpcAdj(comp.lpcPct, true);
+      const finalMargin = baseMargin + adj;
+      finalRate = Math.max(getPrime() + finalMargin, p.floorRate);
+      const marginStr = Math.abs(finalMargin).toFixed(3).replace(/\.?0+$/, '');
+      rateStructureStr = finalMargin >= 0 ? `Prime + ${marginStr}%` : `Prime − ${marginStr}%`;
+      fitLabel = 'CLTV Bucket';
+      fitVal = cltvBucketLabel(cltv, SPRING_HELOC_CLTV_COLS);
+    } else {
+      finalRate = null;
+    }
+
+  } else if (p.lenderGroup === 'spring' && p.family === 'heloan') {
+    // Spring HELOAN
+    const use30yr = termVal === 30;
+    let baseRate = getSpringHeloanBaseRate(fico, cltv, use30yr);
+    if (baseRate !== null) {
+      let adj = 0;
+      if (occupancy === 'investment') adj += SPRING_HELOAN_ADJ.investment;
+      // Loan amount adj
+      for (const tier of SPRING_HELOAN_AMT_ADJ) {
+        if (loanAmt >= tier.min && loanAmt <= tier.max) { adj += tier.adj; break; }
+      }
+      // LPC
+      if (comp.isLpc) adj += getSpringLpcAdj(comp.lpcPct, false);
+      finalRate = baseRate + adj;
+      rateStructureStr = `${use30yr ? 30 : (termVal === 10 ? 10 : 20)}-Year Fixed`;
+      fitLabel = 'CLTV Bucket';
+      fitVal = cltvBucketLabel(cltv, SPRING_HELOC_CLTV_COLS);
+    }
+
+  } else if (p.lenderGroup === 'quorum' && p.family === 'heloc') {
+    // Quorum HELOC
+    let baseMargin = getQuorumHelocBaseMargin(fico, cltv);
+    if (baseMargin !== null) {
+      let adj = 0;
+      if (loanAmt < 50000) adj += QUORUM_HELOC_ADJ.amtUnder50k;
+      if (occupancy === 'second') adj += QUORUM_HELOC_ADJ.secondHome;
+      // Quorum is BPC only via their portal; LPC not available
+      const finalMargin = baseMargin + adj;
+      finalRate = Math.max(getPrime() + finalMargin, p.floorRate);
+      const marginStr = Math.abs(finalMargin).toFixed(3).replace(/\.?0+$/, '');
+      rateStructureStr = finalMargin >= 0 ? `Prime + ${marginStr}%` : `Prime − ${marginStr}%`;
+      fitLabel = 'CLTV Bucket';
+      fitVal = cltvBucketLabel(cltv, QUORUM_HELOC_CLTV_COLS);
+    }
+
+  } else if (p.lenderGroup === 'quorum' && p.family === 'heloan') {
+    // Quorum HELOAN
+    let baseRate = getQuorumHeloanBaseRate(fico, cltv);
+    if (baseRate !== null) {
+      let adj = 0;
+      if (loanAmt < 100000) adj += QUORUM_HELOAN_ADJ.amtUnder100k;
+      if (occupancy === 'second') adj += QUORUM_HELOAN_ADJ.secondHome;
+      if (termVal === 15) adj += QUORUM_HELOAN_ADJ.term15yr;
+      if (termVal === 20) adj += QUORUM_HELOAN_ADJ.term20yr;
+      finalRate = baseRate + adj;
+      rateStructureStr = `${termVal}-Year Fixed`;
+      fitLabel = 'CLTV Bucket';
+      fitVal = cltvBucketLabel(cltv, QUORUM_HELOAN_CLTV_COLS);
+    }
+
+  } else if (p.lenderGroup === 'uwm') {
+    // UWM HELOC – use manually entered rate
+    finalRate = g('interestRate');
+    const margin = finalRate - getPrime();
+    const marginStr = Math.abs(margin).toFixed(3).replace(/\.?0+$/, '');
+    rateStructureStr = margin >= 0 ? `Prime + ${marginStr}%` : `Prime − ${marginStr}%`;
+    fitLabel = '';
+    fitVal = '';
+  }
+
+  // Push computed rate into the rate input (except UWM which user controls)
+  if (p.lenderGroup !== 'uwm' && finalRate !== null) {
+    document.getElementById('interestRate').value = finalRate.toFixed(3).replace(/\.?0+$/, '');
+  } else if (finalRate === null && p.lenderGroup !== 'uwm') {
+    document.getElementById('interestRate').value = 'N/A';
+  }
+
+  const displayRate = finalRate !== null ? finalRate : g('interestRate');
+  set('rateStructureVal', rateStructureStr || '—');
+  set('heroLoanAmt', fmt(loanAmt));
+  show('heroFitRow', !!fitLabel);
+  set('heroFitLabel', fitLabel);
+  set('heroFitVal', fitVal);
+
+  // Sync draw field
+  if (p.family === 'heloc') {
+    const drawEl = document.getElementById('initialDraw');
+    const drawVal = g('initialDraw');
+    if (drawVal > loanAmt) drawEl.value = fmt(loanAmt);
+    set('heroDrawPeriod', p.drawYears + ' years');
+    set('heroRepayPeriod', p.repayYears + ' years');
+  }
+
+  // ── PAYMENT ──────────────────────────────────────────────────────
+  let payment = 0;
+  if (p.family === 'heloc') {
+    const drawAmt = Math.min(g('initialDraw'), loanAmt);
+    payment = calcInterestOnlyPayment(drawAmt, displayRate);
+  } else {
+    const term = p.lenderGroup === 'quorum' ? termVal : (termVal === 30 ? 30 : 20);
+    payment = calcAmortizedPayment(loanAmt, displayRate, term);
+    set('rateStructureVal', rateStructureStr || `${term}-Year Fixed`);
+  }
+
+  set('heroPi', '$' + fmt(Math.round(payment)));
+  set('heroMonthly', '$' + fmt(Math.round(payment)));
+
+  // ── COMP ─────────────────────────────────────────────────────────
+  let compAmt = 0;
+  if (!comp.isLpc && comp.bpcPct > 0) {
+    compAmt = loanAmt * (comp.bpcPct / 100);
+    set('compAmt', fmt(Math.round(compAmt)));         // hidden input display
+    set('compLabel', `Borrower-Paid Comp (${comp.bpcPct.toFixed(2)}%)`);
+  } else if (comp.isLpc) {
+    set('compAmt', '0');
+    set('compLabel', 'LPC – absorbed in rate');
+    compAmt = 0;
+  }
+
+  // ── FEE BUCKETS ──────────────────────────────────────────────────
+  // Read every underlying fee input regardless of visibility.
+  // loadDefaultFees() sets the correct values per product; hidden inputs
+  // retain those values so the math is always accurate.
+  const _admin   = evalExpr(document.getElementById('adminFee').value);
+  const _orig    = evalExpr(document.getElementById('originationFee').value);
+  const _proc    = evalExpr(document.getElementById('processingFee').value);
+  const _cr      = evalExpr(document.getElementById('creditReport').value);
+  const _flood   = evalExpr(document.getElementById('floodFee').value);
+  const _docprep = evalExpr(document.getElementById('docPrepFee').value);
+  const _mers    = evalExpr(document.getElementById('mersFee').value);
+  const _title   = evalExpr(document.getElementById('titleFees').value);
+  const _notary  = evalExpr(document.getElementById('notaryFee').value);
+  const _avm     = evalExpr(document.getElementById('avmFee').value);
+  const _rec     = evalExpr(document.getElementById('recordingFee').value);
+  const _appr    = evalExpr(document.getElementById('appraisalFee').value);
+
+  // Which fees are active for this product?
+  const isSpring  = p.lenderGroup === 'spring';
+  const isQuorum  = p.lenderGroup === 'quorum';
+  const isUWM     = p.lenderGroup === 'uwm';
+
+  // BUCKET 1 — Lender Fees
+  // Spring: admin fee only (origination = 0)
+  // Quorum: origination + processing
+  // UWM:    admin fee
+  const lenderFeeAmt =
+    (isSpring ? _admin : 0) +
+    (isQuorum ? _orig + _proc : 0) +
+    (isUWM    ? _admin : 0);
+
+  // Lender bucket label
+  const lenderBucketLabel = 'Loan Administration';
+  set('lenderFeesBucketLabel', lenderBucketLabel);
+  if (!_bucketOverrides['lender']) setVal('lenderFeesBucketAmt', fmt(Math.round(lenderFeeAmt)));
+
+  // Comp sub-row inside Lender Fees
+  const compBucketVisible = compAmt > 0;
+  show('compBucketRow', compBucketVisible);
+  document.getElementById('compBucketRow').classList.remove('lpc-row');
+  if (compBucketVisible) {
+    set('compBucketLabel', `Loan Origination (Broker)`);
+    if (!_bucketOverrides['comp']) setVal('compBucketAmt', fmt(Math.round(compAmt)));
+  } else if (comp.isLpc) {
+    show('compBucketRow', true);
+    set('compBucketLabel', `LPC ${comp.lpcPct.toFixed(2)}% — absorbed in rate`);
+    if (!_bucketOverrides['comp']) setVal('compBucketAmt', '0');
+    document.getElementById('compBucketRow').classList.add('lpc-row');
+  }
+
+  // BUCKET 2 — Title & Settlement
+  const titleAmt  = _title;
+  const notaryAmt = isSpring ? _notary : 0;
+  const avmAmt    = isSpring ? _avm    : 0;
+  const titleBucketTotal = titleAmt + notaryAmt + avmAmt;
+
+  const titleBucketLabel = 'Title & Signing Services';
+  set('titleBucketLabel', titleBucketLabel);
+  if (!_bucketOverrides['title']) setVal('titleBucketAmt', fmt(Math.round(titleBucketTotal)));
+
+  // BUCKET 3 — Credit, Flood & Compliance
+  const complianceBucket =
+    _cr + _flood +
+    (isSpring ? _docprep + _mers : 0);
+  if (!_bucketOverrides['compliance']) setVal('complianceBucketAmt', fmt(Math.round(complianceBucket)));
+
+  // BUCKET 4 — Recording
+  if (!_bucketOverrides['recording']) setVal('recordingBucketAmt', fmt(Math.round(_rec)));
+
+  // BUCKET 5 — Appraisal (hide row when $0)
+  show('appraisalBucketRow', _appr > 0 || _bucketOverrides['appraisal']);
+  if (!_bucketOverrides['appraisal']) setVal('appraisalBucketAmt', fmt(Math.round(_appr)));
+
+  // GRAND TOTAL — read from bucket inputs (respects any overrides)
+  const _bLender     = evalExpr(document.getElementById('lenderFeesBucketAmt').value);
+  const _bComp       = (compBucketVisible || comp.isLpc) ? evalExpr(document.getElementById('compBucketAmt').value) : 0;
+  const _bTitle      = evalExpr(document.getElementById('titleBucketAmt').value);
+  const _bCompliance = evalExpr(document.getElementById('complianceBucketAmt').value);
+  const _bRecording  = evalExpr(document.getElementById('recordingBucketAmt').value);
+  const _bAppraisal  = evalExpr(document.getElementById('appraisalBucketAmt').value);
+  const totalCC = _bLender + _bComp + _bTitle + _bCompliance + _bRecording + _bAppraisal;
+
+  set('totalLoanCosts', fmtFull(totalCC));
+  set('grandLoanCosts', fmtFull(totalCC));
+  set('ctcLoanAmt', fmtFull(loanAmt));
+  set('ctcCC', fmtFull(totalCC));
+
+  // ── CASH / CREDIT ────────────────────────────────────────────────
+  const payoffsTotal = getPayoffsTotal();
+  if (p.family === 'heloc') {
+    const draw = Math.min(g('initialDraw'), loanAmt);
+    const creditAvail = draw - totalCC - payoffsTotal;
+    set('cbLoanAmt', '$' + fmt(loanAmt));
+    set('cbDraw', '$' + fmt(draw));
+    set('cbCC', fmt(Math.round(totalCC)));
+    set('heroCash', '$' + fmt(Math.round(draw)));
+    set('ctcDraw', fmtFull(draw));
+    const isNeg = creditAvail < 0;
+    set('ctcCash', (isNeg ? '(' : '') + (isNeg ? '-' : '') + '$' + fmtFull(Math.abs(creditAvail)) + (isNeg ? ')' : ''));
+  } else {
+    const cash = loanAmt - totalCC - payoffsTotal;
+    set('cbLoanAmt', '$' + fmt(loanAmt));
+    set('cbCC', fmt(Math.round(totalCC)));
+    set('heroCash', (cash < 0 ? '-$' : '$') + fmt(Math.abs(Math.round(cash))));
+    set('ctcCash', (cash < 0 ? '-$' : '$') + fmtFull(Math.abs(cash)));
+  }
+
+  // Title update
+  const name = document.getElementById('clientName').value.trim();
+  document.title = name ? `Second Lien Estimate – ${name}` : 'Second Lien Estimate – Loan Pronto';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// PAYOFFS
+// ═══════════════════════════════════════════════════════════════════
+function getPayoffsTotal() {
+  const val = evalExpr(document.getElementById('payoffAmt')?.value || '');
+  return isNaN(val) ? 0 : val;
+}
+
+function updatePayoffTotal() {
+  const total = getPayoffsTotal();
+  const sign = document.getElementById('payoffSign');
+  const row  = document.getElementById('payoffRow');
+  if (sign) sign.style.display = total > 0 ? '' : 'none';
+  if (row)  row.classList.toggle('payoff-empty', total <= 0 && !(document.getElementById('payoffLabel')?.value?.trim()));
+  recalc();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// EMAIL / SMS GENERATOR
+// ═══════════════════════════════════════════════════════════════════
+let activeTab = 'email';
+
+document.getElementById('genToggleBtn').addEventListener('click', () => {
+  document.getElementById('genPanel').classList.add('open');
+});
+document.getElementById('genCloseBtn').addEventListener('click', () => {
+  document.getElementById('genPanel').classList.remove('open');
+});
+document.querySelectorAll('.gen-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.gen-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeTab = btn.dataset.tab;
+  });
+});
+document.getElementById('genRegenerateBtn').addEventListener('click', generateMessage);
+document.getElementById('genCopyBtn').addEventListener('click', () => {
+  const out = document.getElementById('genOutput');
+  navigator.clipboard.writeText(out.value).then(() => {
+    const btn = document.getElementById('genCopyBtn');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 1500);
+  });
+});
+
+async function generateMessage() {
+  const p = PRODUCTS[activeProduct];
+  const name    = document.getElementById('clientName').value.trim() || 'the borrower';
+  const loanAmt = g('loanAmount');
+  const rate    = g('interestRate');
+  const firstBal = g('firstBalance');
+  const propVal  = g('propValue');
+  const cltv     = propVal > 0 ? ((loanAmt + firstBal) / propVal * 100).toFixed(1) : '—';
+  const termVal  = parseInt(document.getElementById('qi_term').value) || 20;
+  let payment = 0;
+  if (p.family === 'heloc') {
+    payment = calcInterestOnlyPayment(loanAmt, rate);
+  } else {
+    payment = calcAmortizedPayment(loanAmt, rate, termVal);
+  }
+
+  const adminFeeEl = document.getElementById('adminFee');
+  const totalCC = parseFloat(document.getElementById('grandLoanCosts').textContent.replace(/,/g, '')) || 0;
+  const advisor = document.getElementById('advisorNameDisplay').textContent;
+  const phone   = document.getElementById('advisorPhoneDisplay').textContent;
+
+  const factSheet = `
+Product: ${p.name} (${p.label})
+Lender: ${p.lender}
+Borrower: ${name}
+Loan Amount: $${loanAmt.toLocaleString()}
+Interest Rate: ${rate}%${p.family === 'heloc' ? ' (Prime + Margin, variable)' : ' (Fixed)'}
+${p.family === 'heloc' ? `Draw Period: ${p.drawYears} years | Repayment: ${p.repayYears} years` : `Loan Term: ${termVal} years`}
+Est. Monthly Payment: $${Math.round(payment).toLocaleString()}${p.family === 'heloc' ? ' (interest-only during draw)' : ' (P&I)'}
+Total Closing Costs: $${Math.round(totalCC).toLocaleString()}
+Combined LTV: ${cltv}%
+${p.annualFee > 0 ? `Annual Fee: $${p.annualFee}` : 'No annual fee'}
+Advisor: ${advisor} | ${phone}
+`;
+
+  const prompts = {
+    email: `You are a friendly, professional mortgage loan officer assistant. Write a warm, concise email to send to a client after discussing their second lien options. Use the following loan details to personalize it. Be conversational but professional — not salesy. Include the key numbers. Sign off with the advisor's name and phone. Keep it under 200 words.\n\nLoan Details:\n${factSheet}`,
+    sms: `Write a short, warm SMS text message (under 160 characters) a loan officer would send to a client summarizing their second lien estimate. Include the product name, rate, and monthly payment. Be friendly and direct. No emojis.\n\nLoan Details:\n${factSheet}`,
+    followup: `Write a brief follow-up email for a mortgage client who was sent a second lien estimate but hasn't responded. Keep it short (under 120 words), warm, and low-pressure. Reference the product and monthly payment to jog their memory. End with an easy call to action.\n\nLoan Details:\n${factSheet}`,
+  };
+
+  const outputEl = document.getElementById('genOutput');
+  outputEl.value = '';
+  outputEl.placeholder = 'Generating…';
+  document.getElementById('genRegenerateBtn').disabled = true;
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompts[activeTab] }]
+      })
+    });
+    const data = await resp.json();
+    const text = data.content?.map(b => b.text || '').join('') || 'Unable to generate. Please try again.';
+    outputEl.value = text;
+    outputEl.placeholder = '';
+  } catch (e) {
+    outputEl.value = 'Error generating message. Please check your connection and try again.';
+  }
+  document.getElementById('genRegenerateBtn').disabled = false;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// ADVISOR SETTINGS
+// ═══════════════════════════════════════════════════════════════════
+const ADVISOR_KEY = 'lp_advisor_v1:secondlien';
+
+function applyAdvisorFromInputs() {
+  const n  = (document.getElementById('advisorNameInput')?.value || '').trim() || ' ';
+  const t  = document.getElementById('advisorTitleInput')?.value || '';
+  const m  = document.getElementById('advisorNmlsInput')?.value || '';
+  const ph = document.getElementById('advisorPhoneInput')?.value || '';
+  set('advisorNameDisplay', n);
+  set('advisorTitleDisplay', t);
+  set('advisorNmlsDisplay', m);
+  set('advisorPhoneDisplay', ph);
+}
+function saveAdvisor() {
+  try {
+    localStorage.setItem(ADVISOR_KEY, JSON.stringify({
+      name:  document.getElementById('advisorNameInput').value,
+      title: document.getElementById('advisorTitleInput').value,
+      nmls:  document.getElementById('advisorNmlsInput').value,
+      phone: document.getElementById('advisorPhoneInput').value,
+    }));
+  } catch (e) {}
+}
+function loadAdvisor() {
+  try {
+    const d = JSON.parse(localStorage.getItem(ADVISOR_KEY) || 'null');
+    if (!d) return;
+    if (d.name)  document.getElementById('advisorNameInput').value  = d.name;
+    if (d.title) document.getElementById('advisorTitleInput').value = d.title;
+    if (d.nmls)  document.getElementById('advisorNmlsInput').value  = d.nmls;
+    if (d.phone) document.getElementById('advisorPhoneInput').value = d.phone;
+  } catch (e) {}
+}
+function wireAdvisorSettings() {
+  const panel = document.getElementById('advisorSettings');
+  const toggle = (force) => {
+    const open = typeof force === 'boolean' ? force : !panel.classList.contains('open');
+    panel.classList.toggle('open', open);
+    panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+  };
+  document.addEventListener('keydown', e => {
+    if (e.ctrlKey && e.shiftKey && (e.key === 'L' || e.key === 'l')) { e.preventDefault(); toggle(); }
+    if (e.key === 'Escape' && panel.classList.contains('open')) toggle(false);
+  });
+  ['advisorNameInput', 'advisorTitleInput', 'advisorNmlsInput', 'advisorPhoneInput'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', () => { applyAdvisorFromInputs(); saveAdvisor(); });
+  });
+  document.getElementById('advisorCloseBtn')?.addEventListener('click', () => toggle(false));
+  document.getElementById('advisorResetBtn')?.addEventListener('click', () => {
+    document.getElementById('advisorNameInput').value  = 'Harry Carwile';
+    document.getElementById('advisorTitleInput').value = 'Senior Mortgage Consultant';
+    document.getElementById('advisorNmlsInput').value  = '2134940';
+    document.getElementById('advisorPhoneInput').value = '(704) 307-4482';
+    applyAdvisorFromInputs(); saveAdvisor(); toggle(false);
+  });
+  loadAdvisor(); applyAdvisorFromInputs();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// PRODUCT SWITCHER EVENTS
+// ═══════════════════════════════════════════════════════════════════
+document.querySelectorAll('.ps-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchProduct(btn.dataset.product));
+});
+document.getElementById('qi_comp').addEventListener('change', () => {
+  updateCompVisibility(activeProduct);
+  recalc();
+});
+document.getElementById('qi_prime').addEventListener('input', () => recalc());
+
+// ═══════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════
+const MOS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+document.getElementById('headerDate').textContent = MOS[new Date().getMonth()] + ' ' + new Date().getDate() + ', ' + new Date().getFullYear();
+
+window.addEventListener('load', autosizeAll);
+window.addEventListener('beforeprint', () => { applyAdvisorFromInputs(); saveAdvisor(); });
+document.addEventListener('DOMContentLoaded', () => {
+  wireAdvisorSettings();
+  switchProduct('spring_heloc');
+});
+</script>
+</body>
+</html>
